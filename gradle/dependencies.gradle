@@ -1,0 +1,17 @@
+ext.libsVersion = [
+        gcloudGradle: '+',
+        fullhistoryClient : '1.0.4',
+        fullauthClient : '1.2.5',
+        jdoUtil : '0.0.2'
+]
+
+ext.libs = [
+
+        gcloudGradle : "com.google.cloud.tools:appengine-gradle-plugin:${libsVersion.gcloudGradle}",
+
+        fullauthClient: "$projectDir/../SharedLibs/fullauth-api-java-client-${libsVersions.fullauthClient}.jar",
+        fullhistoryClient: "$projectDir/../SharedLibs/fullhistory-api-java-client-${libsVersions.fullhistoryClient}.jar",
+        jdoUtil : "$projectDir/../SharedLibs/JdoUtil-${libsVersions.jdoUtil}.jar"
+]
+
+

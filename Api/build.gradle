@@ -1,0 +1,92 @@
+
+group 'com.opendigitaluniversity'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'appengine'
+
+sourceCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+buildscript {
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        jcenter()
+    }
+
+    dependencies {
+        classpath libraries.gradleGae
+    }
+}
+
+dependencies {
+
+    compile libraries.servletApi
+
+    // appengine
+    appengineSdk libraries.gaeJavaSdk
+    compile libraries.gaeJdo
+
+    testCompile libraries.gaeTest
+    compile libraries.gaeLabs
+    compile libraries.CommonsFileUpload
+    compile libraries.GaeCloudStorage
+    //resteasy
+    compile libraries.resteasy
+
+    compile project(":Common")
+
+//    compile files("$projectDir/../SharedLibs/fullauth-api-java-client-1.2.5.jar")
+//    compile files("$projectDir/../SharedLibs/fullhistory-api-java-client-1.0.4.jar")
+//
+    compile files("$projectDir/../SharedLibs/JdoUtil-0.0.2.jar")
+
+    compile 'com.google.gcm:gcm-server:1.0.0'
+    compile 'org.bitbucket.b_c:jose4j:0.5.2'
+    compile 'org.apache.commons:commons-lang3:3.4'
+    compile group: 'org.jboss.resteasy', name: 'resteasy-multipart-provider', version: '3.0.19.Final'
+
+    compile libraries.Jsoup
+
+}
+
+appengine {
+    httpPort = config.gae.port.api
+    downloadSdk = true
+
+    appcfg {
+        oauth2 = true
+    }
+    enhancer {
+        version = "v2"
+        api = "jdo"
+        enhanceOnBuild = true
+    }
+
+    jvmFlags = config.gae.defaultJvmFlags
+}
+
+
+task copyGaeConfigFiles(type : Copy) {
+
+    from "${projectDir}/../gaeConfigFiles"
+    include '*.xml'
+    into file("${buildDir}/exploded-app/WEB-INF")
+
+    doLast {
+        println 'copying appengine configuration *.xml files to WEB-INF'
+    }
+}
+
+tasks.appengineRun.dependsOn copyGaeConfigFiles
+tasks.appengineUpdate.dependsOn copyGaeConfigFiles
+
+
+

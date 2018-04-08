@@ -1,0 +1,56 @@
+group 'com.opendigitaluniversity'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'appengine'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+buildscript {
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        jcenter()
+    }
+
+    dependencies {
+        classpath libraries.gradleGae
+    }
+}
+
+dependencies {
+
+    compile libraries.servletApi
+
+    // appengine
+    compile libraries.gaeApiSdk
+    compile libraries.gaeJdo
+
+    compile libraries.gaeLabs
+    testCompile libraries.gaeTest
+
+    compile libraries.GaeCloudStorage
+
+    compile files("$projectDir/../SharedLibs/JdoUtil-0.0.2.jar")
+
+    compile 'com.theupswell.appengine.counter:appengine-counter:2.0.1'
+
+    compile libraries.Jsoup
+    compile libraries.Velocity
+}
+
+appengine {
+
+    enhancer {
+        version = "v2"
+        api = "jdo"
+        enhanceOnBuild = false
+    }
+}
